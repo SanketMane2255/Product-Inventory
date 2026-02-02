@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React,{ useState } from 'react';
 import type { RawMaterial, UnitOfMeasure } from "../types";
 
 interface MaterialFormProps {
@@ -6,8 +6,8 @@ interface MaterialFormProps {
 }
 
 function MaterialForm({ onAdd }: MaterialFormProps) {
-  const [name, setName] = useState("");
-  const [unitOfMeasure, setUnitOfMeasure] = useState<UnitOfMeasure>("units");
+  const [name, setName] = useState('');
+  const [unitOfMeasure, setUnitOfMeasure] = useState<UnitOfMeasure>('units');
   const [quantity, setQuantity] = useState<number>(0);
   const [price, setPrice] = useState<number>(0);
 
@@ -15,33 +15,22 @@ function MaterialForm({ onAdd }: MaterialFormProps) {
   const taxAmount = totalPrice * 0.1;
   const totalAmount = totalPrice + taxAmount;
 
-  const handleAdd = () => {
-    if (!name.trim()) {
-      alert("Please enter material name");
-      return;
-    }
-
-    if (quantity <= 0 || price <= 0) {
-      alert("Quantity and Price must be greater than 0");
-      return;
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleAddClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!name.trim()) {
-      alert("Please enter material name");
+      alert('Please enter material name');
       return;
     }
 
     if (quantity <= 0) {
-      alert("Quantity must be greater than 0");
+      alert('Quantity must be greater than 0');
       return;
     }
 
     if (price <= 0) {
-      alert("Price must be greater than 0");
+      alert('Price must be greater than 0');
       return;
     }
 
@@ -58,17 +47,15 @@ function MaterialForm({ onAdd }: MaterialFormProps) {
 
     onAdd(material);
 
-    setName("");
+    setName('');
     setQuantity(0);
     setPrice(0);
   };
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-      <h3 className="text-lg font-semibold mb-4 text-gray-800">
-        Add Raw Material
-      </h3>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <h3 className="text-lg font-semibold mb-4 text-gray-800">Add Raw Material</h3>
+      <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -89,9 +76,7 @@ function MaterialForm({ onAdd }: MaterialFormProps) {
             </label>
             <select
               value={unitOfMeasure}
-              onChange={(e) =>
-                setUnitOfMeasure(e.target.value as UnitOfMeasure)
-              }
+              onChange={(e) => setUnitOfMeasure(e.target.value as UnitOfMeasure)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="ml">ml</option>
@@ -174,16 +159,17 @@ function MaterialForm({ onAdd }: MaterialFormProps) {
 
         <div className="flex justify-end">
           <button
-            type="submit"
-            onClick={handleAdd}
+            type="button"
+            onClick={handleAddClick}
             className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors"
           >
             + Add Material
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
 
 export default MaterialForm;
+
