@@ -1,5 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { navigateToAdd, navigateToEdit } from '../store/appSlice';
+import { deleteProduct } from '../store/productsSlice';
 
 function ProductList() {
   const dispatch = useAppDispatch();
@@ -11,6 +12,12 @@ function ProductList() {
 
   const handleEdit = (productId: string) => {
     dispatch(navigateToEdit(productId));
+  };
+
+  const handleDelete = (productId: string) => {
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      dispatch(deleteProduct(productId));
+    }
   };
 
   return (
@@ -46,6 +53,9 @@ function ProductList() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Raw Materials
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -68,6 +78,14 @@ function ProductList() {
                   <td className="px-6 py-4 whitespace-nowrap text-gray-700">
                     {product.materials.length}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className="text-red-600 hover:text-red-800 font-medium"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -79,3 +97,4 @@ function ProductList() {
 }
 
 export default ProductList;
+
